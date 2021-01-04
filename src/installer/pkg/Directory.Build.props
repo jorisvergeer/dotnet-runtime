@@ -1,0 +1,35 @@
+﻿<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove(Directory.Build.props, $(MSBuildThisFileDirectory)..))" />
+
+  <PropertyGroup>
+    <Platform>$(TargetArchitecture)</Platform>
+    <DotNetHostBinDir>$(BaseOutputRootPath)corehost</DotNetHostBinDir>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackagePlatform Condition="'$(PackagePlatform)' == ''">$(Platform)</PackagePlatform>
+    <PackagePlatform Condition="'$(PackagePlatform)' == 'amd64'">x64</PackagePlatform>
+
+    <PackageIndexFile>$(MSBuildThisFileDirectory)packageIndex.json</PackageIndexFile>
+
+    <!-- this repo doesn't currently use the index so don't force it to be in sync -->
+    <SkipIndexCheck>true</SkipIndexCheck>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageIndex Include="$(PackageIndexFile)" />
+  </ItemGroup>
+
+  <Target Name="ValidateArgs" Condition="'$(CLIBuildVersion)'==''">
+    <Error Condition="'$(HostPolicyVersion)'==''" Text="HostPolicyVersion is undefined" />
+    <Error Condition="'$(HostResolverVersion)'==''" Text="HostResolverVersion is undefined" />
+    <Error Condition="'$(HostVersion)'==''" Text="HostVersion is undefined" />
+    <Error Condition="'$(AppHostVersion)'==''" Text="AppHostVersion is undefined" />
+  </Target>
+
+  <Target Name="ValidatePreReleaseStrings" Condition="'$(StabilizePackageVersion)'!='true'">
+    <Error Condition="'$(PreReleaseVersionLabel)'==''" Text="PreReleaseVersionLabel is undefined" />
+    <Error Condition="'$(BuildNumberMajor)'==''" Text="BuildNumberMajor is undefined" />
+    <Error Condition="'$(BuildNumberMinor)'==''" Text="BuildNumberMinor is undefined" />
+  </Target>
+</Project>

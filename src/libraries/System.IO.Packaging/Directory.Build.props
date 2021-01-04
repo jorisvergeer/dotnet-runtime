@@ -1,0 +1,7 @@
+﻿<Project>
+  <Import Project="..\Directory.Build.props" />
+  <PropertyGroup>
+    <StrongNameKeyId>Microsoft</StrongNameKeyId>
+    <PackageDescription>Provides classes that support storage of multiple data objects in a single container.</PackageDescription>
+  </PropertyGroup>
+</Project>
